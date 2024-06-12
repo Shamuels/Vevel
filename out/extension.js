@@ -25,12 +25,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
+let fs = require('fs');
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
     let char_number = 0;
-    const fs = require('fs');
-    fs.writeFile('Output.txt', "test");
+    let saved_char_number;
+    let array = new Uint8Array(1);
+    let data;
+    //Create "Database"
+    let filepath = vscode.Uri.file('c:\\Users\\kami\\vscode-level\\test.txt');
+    const wsedit = new vscode.WorkspaceEdit;
+    wsedit.createFile(filepath, { ignoreIfExists: true });
+    vscode.workspace.applyEdit(wsedit);
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "level" is now active!');
@@ -43,14 +50,19 @@ function activate(context) {
         // Display a message box to the user
         vscode.window.showInformationMessage('Hello World from vscode-level!');
     });
+    //Collect Input
     vscode.workspace.onDidChangeTextDocument((e) => {
         char_number++;
+        saved_char_number = char_number.toString();
         console.log(char_number);
+        console.log(array);
+        data = Buffer.from(saved_char_number, 'utf8');
+        vscode.workspace.fs.writeFile(filepath, data);
     });
     vscode.workspace.onDidSaveTextDocument((e) => {
         console.log("saved");
     });
-    var nuts = vscode.window.createTerminal("Nuts");
+    var nuts = vscode.window.createTerminal("Test");
     /*
         vscode.window.onDidCloseTerminal((e:vscode.Terminal) => {
             console.log("closed");
