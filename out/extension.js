@@ -25,19 +25,36 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
-let fs = require('fs');
+const fs = __importStar(require("fs"));
+//Note: Look into using await for thenables 
+//My extension will be running while someone is doing other things on their pc so it needs to be asynchronous or else its gonna hitch them
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
     let char_number = 0;
     let saved_char_number;
-    let array = new Uint8Array(1);
-    let data;
-    //Create "Database"
-    let filepath = vscode.Uri.file('c:\\Users\\kami\\vscode-level\\test.txt');
-    const wsedit = new vscode.WorkspaceEdit;
-    wsedit.createFile(filepath, { ignoreIfExists: true });
-    vscode.workspace.applyEdit(wsedit);
+    let imp_current_lvl;
+    let current_lvl;
+    let imp_final_lvl;
+    let final_lvl;
+    let filepath = '/Users/kami/vscode-level/test.txt';
+    let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
+    //Checks if database is created runs code depending on whether or not it is
+    if (fs.existsSync(filepath)) {
+        fs.readFile(filepath, (err, imp_current_lvl) => {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            //console.log(current_lvl.toString('utf8'));
+            current_lvl = Number(imp_current_lvl.toString('utf8'));
+        });
+    }
+    else {
+        const wsedit = new vscode.WorkspaceEdit;
+        wsedit.createFile(filepathuri);
+        vscode.workspace.applyEdit(wsedit);
+    }
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "level" is now active!');
@@ -50,26 +67,21 @@ function activate(context) {
         // Display a message box to the user
         vscode.window.showInformationMessage('Hello World from vscode-level!');
     });
-    //Collect Input
+    //Collect and store input to database
     vscode.workspace.onDidChangeTextDocument((e) => {
         char_number++;
-        saved_char_number = char_number.toString();
-        console.log(char_number);
-        console.log(array);
-        data = Buffer.from(saved_char_number, 'utf8');
-        vscode.workspace.fs.writeFile(filepath, data);
-    });
-    vscode.workspace.onDidSaveTextDocument((e) => {
-        console.log("saved");
-    });
-    var nuts = vscode.window.createTerminal("Test");
-    /*
-        vscode.window.onDidCloseTerminal((e:vscode.Terminal) => {
-            console.log("closed");
+        saved_char_number = char_number;
+        final_lvl = saved_char_number + current_lvl;
+        imp_final_lvl = final_lvl.toString();
+        fs.writeFile(filepath, imp_final_lvl, 'utf8', (err) => {
+            if (err) {
+                console.error(err);
             }
-    
-        );
-    */
+            else {
+                // file written successfully
+            }
+        });
+    });
     context.subscriptions.push(disposable);
 }
 exports.activate = activate;
