@@ -25,64 +25,71 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
-const fs = __importStar(require("fs"));
 //Note: Look into using await for thenables 
 //My extension will be running while someone is doing other things on their pc so it needs to be asynchronous or else its gonna hitch them
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
-    let char_number = 0;
-    let saved_char_number;
-    let imp_current_lvl;
+    let current_exp = 0;
+    let max_exp;
     let current_lvl;
-    let imp_final_lvl;
-    let final_lvl;
-    let filepath = '/Users/kami/vscode-level/test.txt';
+    let status_bar;
     let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
-    //Checks if database is created runs code depending on whether or not it is
-    if (fs.existsSync(filepath)) {
-        fs.readFile(filepath, (err, imp_current_lvl) => {
-            if (err) {
-                console.error(err);
-                return;
-            }
-            //console.log(current_lvl.toString('utf8'));
-            current_lvl = Number(imp_current_lvl.toString('utf8'));
+    let lvl_array = [];
+    let lvl_information;
+    const encoder = new TextEncoder();
+    const decoder = new TextDecoder();
+    const wsedit = new vscode.WorkspaceEdit;
+    //Note: Make save only a few seconds after on document save has been activated
+    //Create level bar
+    status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
+    //Create initial file for storage of exp and lvl
+    //Set default lvl and exp
+    vscode.workspace.fs.stat(filepathuri).then(statFulfilled, statRejected);
+    function statFulfilled() {
+        vscode.workspace.fs.readFile(filepathuri).then(data => {
+            lvl_array = decoder.decode(data).split(",").map(Number);
+            current_lvl = lvl_array[0];
+            current_exp = lvl_array[1];
+            max_exp = lvl_array[2];
+            status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+            status_bar.show();
         });
     }
-    else {
-        const wsedit = new vscode.WorkspaceEdit;
-        wsedit.createFile(filepathuri);
+    function statRejected() {
+        const start_lvl = encoder.encode("0");
+        wsedit.createFile(filepathuri, { contents: start_lvl });
         vscode.workspace.applyEdit(wsedit);
+        current_lvl = 1;
+        max_exp = 100;
+        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+        status_bar.show();
     }
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "level" is now active!');
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    //
-    let disposable = vscode.commands.registerCommand('level.helloWorld', () => {
-        // The code you place here will be executed every time your command is executed
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from vscode-level!');
-    });
-    //Collect and store input to database
+    //Provide experience for typing
     vscode.workspace.onDidChangeTextDocument((e) => {
-        char_number++;
-        saved_char_number = char_number;
-        final_lvl = saved_char_number + current_lvl;
-        imp_final_lvl = final_lvl.toString();
-        fs.writeFile(filepath, imp_final_lvl, 'utf8', (err) => {
-            if (err) {
-                console.error(err);
-            }
-            else {
-                // file written successfully
-            }
-        });
+        increaseExp();
     });
-    context.subscriptions.push(disposable);
+    function increaseExp() {
+        status_bar.text = `LVL ${current_lvl} ${current_exp++}/${max_exp}`;
+        status_bar.command = 'level.helloWorld';
+        status_bar.show();
+        if (current_exp == max_exp) {
+            current_lvl++;
+            current_exp = 0;
+            max_exp = current_lvl * 100;
+        }
+    }
+    //Occasionally stores current level to a text file
+    function saveData() {
+        lvl_array.push(current_lvl, current_exp, max_exp);
+        lvl_information = encoder.encode(lvl_array.toString());
+        vscode.workspace.fs.writeFile(filepathuri, lvl_information);
+        vscode.workspace.applyEdit(wsedit);
+        lvl_array.length = 0;
+        console.log(lvl_array);
+    }
+    setInterval(saveData, 10000);
+    context.subscriptions.push(status_bar);
 }
 exports.activate = activate;
 // This method is called when your extension is deactivated
