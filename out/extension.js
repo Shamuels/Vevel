@@ -57,11 +57,10 @@ function activate(context) {
         });
     }
     function statRejected() {
-        const start_lvl = encoder.encode("0");
-        wsedit.createFile(filepathuri, { contents: start_lvl });
-        vscode.workspace.applyEdit(wsedit);
         current_lvl = 1;
+        current_exp = 0;
         max_exp = 100;
+        saveData();
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
         status_bar.show();
     }
