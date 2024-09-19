@@ -24,6 +24,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
 const vscode = __importStar(require("vscode"));
 //Note: Look into using await for thenables 
 //My extension will be running while someone is doing other things on their pc so it needs to be asynchronous or else its gonna hitch them
@@ -33,25 +35,19 @@ function activate(context) {
     let current_exp = 0;
     let max_exp;
     let current_lvl;
-    let status_bar;
     let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
-    let lvl_array = [];
-    let lvl_information;
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
     const wsedit = new vscode.WorkspaceEdit;
     //Note: Make save only a few seconds after on document save has been activated
     //Create level bar
-    status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
+    const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
     //Create initial file for storage of exp and lvl
     //Set default lvl and exp
     vscode.workspace.fs.stat(filepathuri).then(statFulfilled, statRejected);
     function statFulfilled() {
         vscode.workspace.fs.readFile(filepathuri).then(data => {
-            lvl_array = decoder.decode(data).split(",").map(Number);
-            current_lvl = lvl_array[0];
-            current_exp = lvl_array[1];
-            max_exp = lvl_array[2];
+            [current_lvl, current_exp, max_exp] = decoder.decode(data).split(",").map(Number);
             status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
             status_bar.show();
         });
@@ -66,10 +62,11 @@ function activate(context) {
     }
     //Provide experience for typing
     vscode.workspace.onDidChangeTextDocument((e) => {
+        current_exp++;
         increaseExp();
     });
     function increaseExp() {
-        status_bar.text = `LVL ${current_lvl} ${current_exp++}/${max_exp}`;
+        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
         status_bar.command = 'level.helloWorld';
         status_bar.show();
         if (current_exp == max_exp) {
@@ -80,12 +77,9 @@ function activate(context) {
     }
     //Occasionally stores current level to a text file
     function saveData() {
-        lvl_array.push(current_lvl, current_exp, max_exp);
-        lvl_information = encoder.encode(lvl_array.toString());
+        let lvl_information = encoder.encode([current_lvl, current_exp, max_exp].toString());
         vscode.workspace.fs.writeFile(filepathuri, lvl_information);
         vscode.workspace.applyEdit(wsedit);
-        lvl_array.length = 0;
-        console.log(lvl_array);
     }
     setInterval(saveData, 10000);
     context.subscriptions.push(status_bar);
