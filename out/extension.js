@@ -39,6 +39,7 @@ function activate(context) {
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
     const wsedit = new vscode.WorkspaceEdit;
+    let a = 0;
     //Note: Make save only a few seconds after on document save has been activated
     //Create level bar
     const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
@@ -61,11 +62,16 @@ function activate(context) {
         status_bar.show();
     }
     //Provide experience for typing
+    //adds 1 for text written in the document
+    //add +2 changes for different actions like saves and undos (fun randomizer element)
     vscode.workspace.onDidChangeTextDocument((e) => {
-        current_exp++;
+        increaseExp();
+    });
+    vscode.workspace.onDidSaveTextDocument((e) => {
         increaseExp();
     });
     function increaseExp() {
+        current_exp++;
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
         status_bar.command = 'level.helloWorld';
         status_bar.show();
