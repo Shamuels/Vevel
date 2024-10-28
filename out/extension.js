@@ -39,7 +39,10 @@ function activate(context) {
     let current_exp = 0;
     let max_exp;
     let current_lvl;
-    let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
+    let extensionuri = context.extensionUri;
+    //let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
+    let filepathuri = vscode.Uri.file(context.extensionPath + "/test.txt");
+    console.log(filepathuri);
     const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
@@ -47,34 +50,11 @@ function activate(context) {
     const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
     const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
     const git = gitExtension?.getAPI(1);
-    //need to confirm that the extension is enabled and initalized before creating listener
-    //can do this through then statements and so on
-    async function getCommit() {
-        const commit = await git?.repositories[0].log();
-        if (commit != undefined && workspacefolder != undefined) {
-            const topdir = commit[0].hash.substring(0, 2);
-            const subdir = commit[0].hash.substring(2);
-            if ((0, node_fs_2.existsSync)(workspacefolder + "//.git//objects//" + topdir + "//" + subdir)) {
-                current_exp += 20;
-                status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-                status_bar.command = 'level.helloWorld';
-                status_bar.show();
-            }
-        }
-    }
-    function debounce_inherit(func, ms) {
-        let timeout;
-        return function () {
-            clearTimeout(timeout);
-            timeout = setTimeout(func, ms);
-        };
-    }
     const debounce_commit = debounce_inherit(getCommit, 1000);
     const debounce_exp = debounce_inherit(increaseExp, 70);
-    //Note: Make save only a few seconds after on document save has been activated
-    //Create level bar
-    //Create initial file for storage of exp and lvl
-    //Set default lvl and exp
+    //Uses metadata to identify whether a file exists or not (could just use file exists but whatever)
+    //If fulfilled grab info from file and display them on level bar
+    //If rejected base level stats are set for level bar and saved to file
     vscode.workspace.fs.stat(filepathuri).then(statFulfilled, statRejected);
     function statFulfilled() {
         vscode.workspace.fs.readFile(filepathuri).then(data => {
@@ -91,15 +71,16 @@ function activate(context) {
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
         status_bar.show();
     }
-    //Provide experience for typing
-    //adds 1 for text written in the document
-    //add +2 changes for different actions like saves and undos (fun randomizer element)
+    //Provides experience mainly for typing but also gives exp for other changes in the doc
     vscode.workspace.onDidChangeTextDocument((e) => {
-        //debounce_exp()
+        debounce_exp();
     });
+    //Provides experience for saving document
     vscode.workspace.onDidSaveTextDocument((e) => {
         debounce_exp();
     });
+    //Watches COMMIT_EDITMSG for changes to see if commit is made
+    //If changes are made to COMMIT_EDITMSG commit is verified through a debounce function and exp is provided to level bar
     if (workspacefolder != undefined) {
         (0, node_fs_1.watch)(workspacefolder + "//.git//COMMIT_EDITMSG", (e) => {
             if (gitExtension?.enabled == true && git?.state == "initialized") {
@@ -107,6 +88,28 @@ function activate(context) {
             }
         });
     }
+    async function getCommit() {
+        const commit = await git?.repositories[0].log();
+        if (commit != undefined && workspacefolder != undefined) {
+            const topdir = commit[0].hash.substring(0, 2);
+            const subdir = commit[0].hash.substring(2);
+            if ((0, node_fs_2.existsSync)(workspacefolder + "//.git//objects//" + topdir + "//" + subdir)) {
+                current_exp += 20;
+                status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+                status_bar.command = 'level.helloWorld';
+                status_bar.show();
+            }
+        }
+    }
+    //Base debounce function that can be inherited by other custom debounces
+    function debounce_inherit(func, ms) {
+        let timeout;
+        return function () {
+            clearTimeout(timeout);
+            timeout = setTimeout(func, ms);
+        };
+    }
+    //Base function is called to increase a user's exp
     function increaseExp() {
         current_exp++;
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
@@ -118,15 +121,23 @@ function activate(context) {
             max_exp = current_lvl * 100;
         }
     }
-    //Occasionally stores current level to a text file
+    //Converts level data to a valid form before saving to txt file
     function saveData() {
         let lvl_information = encoder.encode([current_lvl, current_exp, max_exp].toString());
         vscode.workspace.fs.writeFile(filepathuri, lvl_information);
         vscode.workspace.applyEdit(wsedit);
     }
-    //Interval will eventually be replaced with debouncing so no more 
-    //spamming the disk even if the user isnt doing anything
     setInterval(saveData, 20000);
+    //Custom level bar
+    const level_bar = vscode.window.createWebviewPanel("levelpanel", "goonpanel", vscode.ViewColumn.One);
+    level_bar.webview.html = htmlcontent();
+    function htmlcontent() {
+        return `<!DOCTYPE html>
+		<head> GOON </head>
+		<body>     <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGxzM2RsM3V0MWVveGRqcGgycDRqd3U3cnd4MTlqZ3hhcXE2OHR4YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PyIFkXfjIcIcE/giphy.gif" width="300" /> </body>
+		
+		</html>`;
+    }
     context.subscriptions.push(status_bar);
 }
 exports.activate = activate;
