@@ -39,10 +39,7 @@ function activate(context) {
     let current_exp = 0;
     let max_exp;
     let current_lvl;
-    let extensionuri = context.extensionUri;
-    //let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
-    let filepathuri = vscode.Uri.file(context.extensionPath + "/test.txt");
-    console.log(filepathuri);
+    let filepathuri = vscode.Uri.file(context.extensionPath + "/expinfo.txt");
     const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
@@ -72,11 +69,11 @@ function activate(context) {
         status_bar.show();
     }
     //Provides experience mainly for typing but also gives exp for other changes in the doc
-    vscode.workspace.onDidChangeTextDocument((e) => {
+    let editdocument = vscode.workspace.onDidChangeTextDocument((e) => {
         debounce_exp();
     });
     //Provides experience for saving document
-    vscode.workspace.onDidSaveTextDocument((e) => {
+    let savedocument = vscode.workspace.onDidSaveTextDocument((e) => {
         debounce_exp();
     });
     //Watches COMMIT_EDITMSG for changes to see if commit is made
@@ -128,17 +125,9 @@ function activate(context) {
         vscode.workspace.applyEdit(wsedit);
     }
     setInterval(saveData, 20000);
-    //Custom level bar
-    const level_bar = vscode.window.createWebviewPanel("levelpanel", "goonpanel", vscode.ViewColumn.One);
-    level_bar.webview.html = htmlcontent();
-    function htmlcontent() {
-        return `<!DOCTYPE html>
-		<head> GOON </head>
-		<body>     <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGxzM2RsM3V0MWVveGRqcGgycDRqd3U3cnd4MTlqZ3hhcXE2OHR4YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PyIFkXfjIcIcE/giphy.gif" width="300" /> </body>
-		
-		</html>`;
-    }
     context.subscriptions.push(status_bar);
+    context.subscriptions.push(editdocument);
+    context.subscriptions.push(savedocument);
 }
 exports.activate = activate;
 // This method is called when your extension is deactivated

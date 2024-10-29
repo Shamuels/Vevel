@@ -19,10 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let current_exp = 0;
 	let max_exp: number;
 	let current_lvl: number;
-	let extensionuri = context.extensionUri
-	//let filepathuri = vscode.Uri.file('/Users/kami/vscode-level/test.txt');
 	let filepathuri = vscode.Uri.file(context.extensionPath + "/expinfo.txt");
-	console.log(filepathuri)
 	const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath
 	const encoder = new TextEncoder()
 	const decoder = new TextDecoder()
@@ -59,12 +56,12 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	//Provides experience mainly for typing but also gives exp for other changes in the doc
-	vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
+	let editdocument = vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
 		debounce_exp()
 	});
 
 	//Provides experience for saving document
-	vscode.workspace.onDidSaveTextDocument((e: vscode.TextDocument) => {
+	let savedocument = vscode.workspace.onDidSaveTextDocument((e: vscode.TextDocument) => {
 		debounce_exp()
 	})
 
@@ -129,24 +126,9 @@ export function activate(context: vscode.ExtensionContext) {
 	setInterval(saveData, 20000);
 
 
-	//Custom level bar
-	const level_bar = vscode.window.createWebviewPanel(
-		"levelpanel",
-		"goonpanel",
-		vscode.ViewColumn.One
-	)
-
-	level_bar.webview.html = htmlcontent()
-
-	function htmlcontent() {
-		return `<!DOCTYPE html>
-		<head> GOON </head>
-		<body>     <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExdGxzM2RsM3V0MWVveGRqcGgycDRqd3U3cnd4MTlqZ3hhcXE2OHR4YSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/PyIFkXfjIcIcE/giphy.gif" width="300" /> </body>
-		
-		</html>`
-	}
-
 	context.subscriptions.push(status_bar)
+	context.subscriptions.push(editdocument)
+	context.subscriptions.push(savedocument)
 
 }
 
