@@ -1,7 +1,9 @@
-# level README
-
-This is the README for your extension "level". After writing up a brief description, we recommend including the following sections.
-
+<div align='center'>
+  
+# Vevel
+</div>
+<p align='center'>
+It’s time to vevel up! Make programming more engaging and earn XP by writing code, saving your projects, and making commits!</p>
 ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
