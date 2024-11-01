@@ -3,7 +3,12 @@
   "displayName": "Vevel",
   "publisher": "Shamuels",
   "description": "It’s time to vevel up! Make programming more engaging and earn XP by writing code, saving your projects, and making commits!",
-  "icon": "assets/vevel_logo.png",
+  "icon": "assets/vevel_icon_logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shamuels/Vevel.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.86.0"
