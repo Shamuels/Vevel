@@ -1,22 +1,26 @@
 {
-  "name": "level",
-  "displayName": "vscode-level",
-  "description": "",
-  "version": "0.0.1",
+  "name": "vevel",
+  "displayName": "Vevel",
+  "publisher": "Shamuels",
+  "description": "It’s time to vevel up! Make programming more engaging and earn XP by writing code, saving your projects, and making commits!",
+  "icon": "assets/vevel_logo.png",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.86.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "level.helloWorld",
-        "title": "Hello World",
-        "tooltip?": "nuts"
+        "command": "",
+        "title": "",
+        "tooltip?": ""
       }
     ]
   },
