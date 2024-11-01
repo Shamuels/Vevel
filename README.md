@@ -1,8 +1,11 @@
 <div align='center'>
   
 # Vevel
+<img src="https://github.com/Shamuels/Vevel/blob/master/assets/vevel_logo.png" width="250">
+
 </div>
 <p align='center'>
+<br>
 It’s time to vevel up! Make programming more engaging and earn XP by writing code, saving your projects, and making commits!</p>
 
 ## Functionaity
