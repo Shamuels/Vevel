@@ -29,14 +29,11 @@ exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 const node_fs_1 = require("node:fs");
 const node_fs_2 = require("node:fs");
-//TODO
-//get debouncing working for commit function and saving
-//look into exp being gained from git commit
 //My extension will be running while someone is doing other things on their pc so it needs to be asynchronous or else its gonna hitch them
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
-    let current_exp = 0;
+    let current_exp;
     let max_exp;
     let current_lvl;
     let filepathuri = vscode.Uri.file(context.extensionPath + "/expinfo.txt");
@@ -48,26 +45,11 @@ function activate(context) {
     const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
     const git = gitExtension?.getAPI(1);
     const debounce_commit = debounce_inherit(getCommit, 1000);
-    const debounce_exp = debounce_inherit(increaseExp, 70);
+    const debounce_exp = debounce_inherit(increaseExp, 7000);
     //Uses metadata to identify whether a file exists or not (could just use file exists but whatever)
     //If fulfilled grab info from file and display them on level bar
     //If rejected base level stats are set for level bar and saved to file
-    vscode.workspace.fs.stat(filepathuri).then(statFulfilled, statRejected);
-    function statFulfilled() {
-        vscode.workspace.fs.readFile(filepathuri).then(data => {
-            [current_lvl, current_exp, max_exp] = decoder.decode(data).split(",").map(Number);
-            status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-            status_bar.show();
-        });
-    }
-    function statRejected() {
-        current_lvl = 1;
-        current_exp = 0;
-        max_exp = 100;
-        saveData();
-        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-        status_bar.show();
-    }
+    generateStatusBar(context);
     //Provides experience mainly for typing but also gives exp for other changes in the doc
     let editdocument = vscode.workspace.onDidChangeTextDocument((e) => {
         debounce_exp();
@@ -76,6 +58,14 @@ function activate(context) {
     let savedocument = vscode.workspace.onDidSaveTextDocument((e) => {
         debounce_exp();
     });
+    //Retrieves current level info from vscode and populates status bar with it
+    function generateStatusBar(context) {
+        current_lvl = context.globalState.get("current_lvl") || 1;
+        current_exp = context.globalState.get("current_exp") || 0;
+        max_exp = context.globalState.get("max_exp") || 100;
+        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+        status_bar.show();
+    }
     //Watches COMMIT_EDITMSG for changes to see if commit is made
     //If changes are made to COMMIT_EDITMSG commit is verified through a debounce function and exp is provided to level bar
     if (workspacefolder != undefined) {
@@ -118,13 +108,13 @@ function activate(context) {
             max_exp = current_lvl * 100;
         }
     }
-    //Converts level data to a valid form before saving to txt file
-    function saveData() {
-        let lvl_information = encoder.encode([current_lvl, current_exp, max_exp].toString());
-        vscode.workspace.fs.writeFile(filepathuri, lvl_information);
-        vscode.workspace.applyEdit(wsedit);
+    //Stores current level information 
+    function saveData(context) {
+        context.globalState.update("current_lvl", current_lvl);
+        context.globalState.update("current_exp", current_exp);
+        context.globalState.update("max_exp", max_exp);
     }
-    setInterval(saveData, 20000);
+    setInterval(() => saveData(context), 20000);
     context.subscriptions.push(status_bar);
     context.subscriptions.push(editdocument);
     context.subscriptions.push(savedocument);
