@@ -45,7 +45,7 @@ function activate(context) {
     const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
     const git = gitExtension?.getAPI(1);
     const debounce_commit = debounce_inherit(getCommit, 1000);
-    const debounce_exp = debounce_inherit(increaseExp, 7000);
+    const debounce_exp = debounce_inherit(increaseExp, 70);
     //Uses metadata to identify whether a file exists or not (could just use file exists but whatever)
     //If fulfilled grab info from file and display them on level bar
     //If rejected base level stats are set for level bar and saved to file

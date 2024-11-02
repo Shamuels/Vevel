@@ -1,6 +1,7 @@
 <div align='center'>
   
 # Vevel
+
 <img src="https://github.com/Shamuels/Vevel/blob/master/assets/vevel_logo.png" width="250">
 
 </div>
@@ -26,6 +27,8 @@ Extension released with base functionaility.
 
 ## Future features
 
-Save level info in vscode instead of external txt file.
+<s>Save level info in vscode instead of external txt file.</s>
 
 Improve the presentation of level bar.
+
+Revamp exp system.
