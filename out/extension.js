@@ -36,11 +36,7 @@ function activate(context) {
     let current_exp;
     let max_exp;
     let current_lvl;
-    let filepathuri = vscode.Uri.file(context.extensionPath + "/expinfo.txt");
     const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
-    const encoder = new TextEncoder();
-    const decoder = new TextDecoder();
-    const wsedit = new vscode.WorkspaceEdit;
     const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
     const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
     const git = gitExtension?.getAPI(1);
@@ -83,7 +79,6 @@ function activate(context) {
             if ((0, node_fs_2.existsSync)(workspacefolder + "//.git//objects//" + topdir + "//" + subdir)) {
                 current_exp += 20;
                 status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-                status_bar.command = 'level.helloWorld';
                 status_bar.show();
             }
         }
@@ -100,7 +95,6 @@ function activate(context) {
     function increaseExp() {
         current_exp++;
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-        status_bar.command = 'level.helloWorld';
         status_bar.show();
         if (current_exp == max_exp) {
             current_lvl++;

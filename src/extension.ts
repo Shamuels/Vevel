@@ -4,9 +4,7 @@ import * as vscode from 'vscode';
 import { GitExtension, Repository } from './git';
 import { watch } from 'node:fs';
 import { existsSync } from 'node:fs';
-import { constrainedMemory } from 'process';
-import { Console } from 'console';
-import { time } from 'node:console';
+
 
 
 //My extension will be running while someone is doing other things on their pc so it needs to be asynchronous or else its gonna hitch them
@@ -16,11 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 	let current_exp: any;
 	let max_exp: any;
 	let current_lvl: any;
-	let filepathuri = vscode.Uri.file(context.extensionPath + "/expinfo.txt");
 	const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath
-	const encoder = new TextEncoder()
-	const decoder = new TextDecoder()
-	const wsedit = new vscode.WorkspaceEdit
 	const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
 	const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
 	const git = gitExtension?.getAPI(1);
@@ -71,7 +65,6 @@ export function activate(context: vscode.ExtensionContext) {
 			if (existsSync(workspacefolder + "//.git//objects//" + topdir + "//" + subdir)) {
 				current_exp += 20
 				status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-				status_bar.command = 'level.helloWorld';
 				status_bar.show();
 			}
 		}
@@ -93,7 +86,6 @@ export function activate(context: vscode.ExtensionContext) {
 	function increaseExp() {
 		current_exp++
 		status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-		status_bar.command = 'level.helloWorld';
 		status_bar.show();
 		if (current_exp == max_exp) {
 			current_lvl++
@@ -114,7 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 	setInterval(() => saveData(context), 20000);
 
 
-	context.subscriptions.push(status_bar)
+	status_bar.dispose
 	context.subscriptions.push(editdocument)
 	context.subscriptions.push(savedocument)
 
