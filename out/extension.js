@@ -109,7 +109,7 @@ function activate(context) {
         context.globalState.update("max_exp", max_exp);
     }
     setInterval(() => saveData(context), 20000);
-    context.subscriptions.push(status_bar);
+    status_bar.dispose;
     context.subscriptions.push(editdocument);
     context.subscriptions.push(savedocument);
 }
