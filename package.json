@@ -9,7 +9,7 @@
     "url": "https://github.com/Shamuels/Vevel.git"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "engines": {
     "vscode": "^1.86.0"
   },
