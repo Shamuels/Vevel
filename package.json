@@ -9,7 +9,7 @@
     "url": "https://github.com/Shamuels/Vevel.git"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.86.0"
   },
@@ -20,8 +20,7 @@
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
-  "contributes": {
-  },
+  "contributes": {},
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
