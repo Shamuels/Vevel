@@ -130,3 +130,4 @@ dist
 .pnp.*
 expinfo.txt
 out/
+*.vsix
