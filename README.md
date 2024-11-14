@@ -2,8 +2,6 @@
   
 # Vevel
 
-<img src="https://github.com/Shamuels/Vevel/blob/master/assets/vevel_logo.png" width="250">
-
 </div>
 <p align='center'>
 <br>
