@@ -4,7 +4,6 @@ import * as vscode from 'vscode';
 import { GitExtension, Repository } from './git';
 import { watch } from 'node:fs';
 import { existsSync } from 'node:fs';
-import { match } from 'node:assert';
 
 
 
@@ -12,35 +11,36 @@ import { match } from 'node:assert';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	let current_exp: any;
-	let max_exp: any;
-	let current_lvl: any;
+	let current_exp: number;
+	let max_exp: number;
+	let current_lvl: number;
 	const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath
 	const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
 	const gitExtension = vscode.extensions.getExtension<GitExtension>('vscode.git')?.exports;
 	const git = gitExtension?.getAPI(1);
 	const debounce_commit = debounce_inherit(getCommit, 1000)
 	const debounce_exp = debounce_inherit(increaseExp, 70)
-	let i = 1
-	let level:number[]=[]
+	let progressbar: string[]= ["$(level-bar-start)","$(level-bar-modular)","$(level-bar-modular)","$(level-bar-end)"]
 	
-
-	//Uses metadata to identify whether a file exists or not (could just use file exists but whatever)
-	//If fulfilled grab info from file and display them on level bar
-	//If rejected base level stats are set for level bar and saved to file
-//testing dynamic level gen 
-/*
-	while (i < 51) {
-		let exp:any
-		exp = Math.pow(1.05,i)
-		level.push(exp)
-		i++
-		if(i == 50){
-			console.log(level)
-
-		}
-	}
-*/
+	vscode.commands.registerCommand('extension.Reset', () => {
+		current_lvl = 1
+		current_exp = 0 
+		max_exp = Math.round(100 * Math.pow(2,1.5))
+		saveData(context)
+		status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+		status_bar.show();
+	});
+	  
+	/*
+	vscode.commands.registerCommand('extension.ExpInc', () => {
+		current_exp+=100
+		saveData(context)
+		status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+		status_bar.show();
+		increaseExp()
+	});
+	*/
+	
 	generateStatusBar(context)
 
 	//Provides experience mainly for typing but also gives exp for other changes in the doc
@@ -57,9 +57,10 @@ export function activate(context: vscode.ExtensionContext) {
 	function generateStatusBar(context: vscode.ExtensionContext) {
 		current_lvl = context.globalState.get<number>("current_lvl") || 1
 		current_exp = context.globalState.get<number>("current_exp") || 0
-		max_exp = context.globalState.get<number>("max_exp") || 100 * Math.pow(i,1.5)
+		max_exp = context.globalState.get<number>("max_exp") || Math.round(100 * Math.pow(2,1.5))
 		status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-		status_bar.show();
+		//status_bar.text = progressbar.join('');
+		status_bar.show();	
 	}
 
 	//Watches COMMIT_EDITMSG for changes to see if commit is made
@@ -98,20 +99,32 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	//Base function is called to increase a user's exp
+	/*
+	function increaseExp() {
+		current_exp++
+		let percentage = current_exp/max_exp
+		console.log(percentage)
+	}
+		*/
+	
+
 	function increaseExp() {
 		current_exp++
 		status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
 		status_bar.show();
-		if (current_exp == max_exp) {
+		while(current_exp >= max_exp) {
 			current_lvl++
-			current_exp = 0
-			max_exp = 100 * Math.pow(i,1.5)
+			current_exp -= max_exp
+			let next_level = current_lvl
+			next_level++
+			max_exp = Math.round(100 * Math.pow(next_level,1.5))
 			status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
 			status_bar.show();
 			saveData(context)
 		}
 
 	}
+
 
 	//Stores current level information 
 	function saveData(context: vscode.ExtensionContext) {
@@ -121,7 +134,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 
-	setInterval(() => saveData(context), 20000);
+
 
 
 	status_bar.dispose

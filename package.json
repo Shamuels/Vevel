@@ -9,7 +9,7 @@
     "url": "https://github.com/Shamuels/Vevel.git"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "engines": {
     "vscode": "^1.86.0"
   },
@@ -20,7 +20,65 @@
     "onStartupFinished"
   ],
   "main": "./out/extension.js",
-  "contributes": {},
+  "contributes": {
+    "icons": {
+      "level-bar-start": {
+        "description": "my icon",
+        "default": {
+          "fontPath": "./vevel_assets/vevel-fontv2.woff",
+          "fontCharacter": "\\e901"
+        }
+      },
+      "level-bar-end": {
+        "description": "my icon",
+        "default": {
+          "fontPath": "./vevel_assets/vevel-fontv2.woff",
+          "fontCharacter": "\\e902"
+        }
+      },
+      "level-bar-modular": {
+        "description": "my icon",
+        "default": {
+          "fontPath": "./vevel_assets/vevel-fontv2.woff",
+          "fontCharacter": "\\e900"
+        }
+      },
+      "level-bar-1": {
+        "description": "my icon",
+        "default": {
+          "fontPath": "./vevel_assets/vevel-fontv2.woff",
+          "fontCharacter": "\\e903"
+        }
+      },
+      "level-bar-2": {
+        "description": "my icon",
+        "default": {
+          "fontPath": "./vevel_assets/vevel-fontv2.woff",
+          "fontCharacter": "\\e904"
+        }
+      }
+    },
+    "commands":[
+      {
+        "command": "extension.Reset",
+        "title": "Reset"
+      },
+      {
+        "command": "extension.ExpInc",
+        "title": "ExpInc"
+      }
+    ],
+    "keybindings":[
+      {
+        "command": "extension.Reset",
+        "key": "shift+r"
+      },
+      {
+        "command": "extension.ExpInc",
+        "key": "shift+i"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
@@ -30,14 +88,14 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.86.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "18.x",
+    "@types/vscode": "^1.86.0",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
-    "eslint": "^8.56.0",
-    "typescript": "^5.3.3",
     "@vscode/test-cli": "^0.0.6",
-    "@vscode/test-electron": "^2.3.9"
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
   }
 }

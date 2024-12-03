@@ -42,23 +42,23 @@ function activate(context) {
     const git = gitExtension?.getAPI(1);
     const debounce_commit = debounce_inherit(getCommit, 1000);
     const debounce_exp = debounce_inherit(increaseExp, 70);
-    let i = 1;
-    let level = [];
-    //Uses metadata to identify whether a file exists or not (could just use file exists but whatever)
-    //If fulfilled grab info from file and display them on level bar
-    //If rejected base level stats are set for level bar and saved to file
-    //testing dynamic level gen 
+    let progressbar = ["$(level-bar-start)", "$(level-bar-modular)", "$(level-bar-modular)", "$(level-bar-end)"];
+    vscode.commands.registerCommand('extension.Reset', () => {
+        current_lvl = 1;
+        current_exp = 0;
+        max_exp = Math.round(100 * Math.pow(2, 1.5));
+        saveData(context);
+        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+        status_bar.show();
+    });
     /*
-        while (i < 51) {
-            let exp:any
-            exp = Math.pow(1.05,i)
-            level.push(exp)
-            i++
-            if(i == 50){
-                console.log(level)
-    
-            }
-        }
+    vscode.commands.registerCommand('extension.ExpInc', () => {
+        current_exp+=100
+        saveData(context)
+        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+        status_bar.show();
+        increaseExp()
+    });
     */
     generateStatusBar(context);
     //Provides experience mainly for typing but also gives exp for other changes in the doc
@@ -73,8 +73,9 @@ function activate(context) {
     function generateStatusBar(context) {
         current_lvl = context.globalState.get("current_lvl") || 1;
         current_exp = context.globalState.get("current_exp") || 0;
-        max_exp = context.globalState.get("max_exp") || 100 * Math.pow(i, 1.5);
+        max_exp = context.globalState.get("max_exp") || Math.round(100 * Math.pow(2, 1.5));
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+        //status_bar.text = progressbar.join('');
         status_bar.show();
     }
     //Watches COMMIT_EDITMSG for changes to see if commit is made
@@ -107,14 +108,23 @@ function activate(context) {
         };
     }
     //Base function is called to increase a user's exp
+    /*
+    function increaseExp() {
+        current_exp++
+        let percentage = current_exp/max_exp
+        console.log(percentage)
+    }
+        */
     function increaseExp() {
         current_exp++;
         status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
         status_bar.show();
-        if (current_exp == max_exp) {
+        while (current_exp >= max_exp) {
             current_lvl++;
-            current_exp = 0;
-            max_exp = 100 * Math.pow(i, 1.5);
+            current_exp -= max_exp;
+            let next_level = current_lvl;
+            next_level++;
+            max_exp = Math.round(100 * Math.pow(next_level, 1.5));
             status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
             status_bar.show();
             saveData(context);
@@ -126,7 +136,6 @@ function activate(context) {
         context.globalState.update("current_exp", current_exp);
         context.globalState.update("max_exp", max_exp);
     }
-    setInterval(() => saveData(context), 20000);
     status_bar.dispose;
     context.subscriptions.push(editdocument);
     context.subscriptions.push(savedocument);

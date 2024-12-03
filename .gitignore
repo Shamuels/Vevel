@@ -131,3 +131,4 @@ dist
 expinfo.txt
 out/
 *.vsix
+*.woff
