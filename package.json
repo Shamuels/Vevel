@@ -9,7 +9,7 @@
     "url": "https://github.com/Shamuels/Vevel.git"
   },
   "license": "SEE LICENSE IN LICENSE",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "engines": {
     "vscode": "^1.86.0"
   },
@@ -22,60 +22,624 @@
   "main": "./out/extension.js",
   "contributes": {
     "icons": {
-      "level-bar-start": {
-        "description": "my icon",
-        "default": {
-          "fontPath": "./vevel_assets/vevel-fontv2.woff",
-          "fontCharacter": "\\e901"
+      "0-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e0"
         }
-      },
-      "level-bar-end": {
-        "description": "my icon",
-        "default": {
-          "fontPath": "./vevel_assets/vevel-fontv2.woff",
-          "fontCharacter": "\\e902"
+    },"1-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e1"
         }
-      },
-      "level-bar-modular": {
-        "description": "my icon",
-        "default": {
-          "fontPath": "./vevel_assets/vevel-fontv2.woff",
-          "fontCharacter": "\\e900"
+    },"2-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e2"
         }
-      },
-      "level-bar-1": {
-        "description": "my icon",
-        "default": {
-          "fontPath": "./vevel_assets/vevel-fontv2.woff",
-          "fontCharacter": "\\e903"
+    },"3-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e3"
         }
-      },
-      "level-bar-2": {
-        "description": "my icon",
-        "default": {
-          "fontPath": "./vevel_assets/vevel-fontv2.woff",
-          "fontCharacter": "\\e904"
+    },"4-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e4"
         }
-      }
+    },"5-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e5"
+        }
+    },"6-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e6"
+        }
+    },"7-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e7"
+        }
+    },"8-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e8"
+        }
+    },"9-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e9"
+        }
+    },"10-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e10"
+        }
+    },"11-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e11"
+        }
+    },"12-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e12"
+        }
+    },"13-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e13"
+        }
+    },"14-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e14"
+        }
+    },"15-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e15"
+        }
+    },"16-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e16"
+        }
+    },"17-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e17"
+        }
+    },"18-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e18"
+        }
+    },"19-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e19"
+        }
+    },"20-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e20"
+        }
+    },"21-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e21"
+        }
+    },"22-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e22"
+        }
+    },"23-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e23"
+        }
+    },"24-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e24"
+        }
+    },"25-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e25"
+        }
+    },"26-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e26"
+        }
+    },"27-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e27"
+        }
+    },"28-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e28"
+        }
+    },"29-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e29"
+        }
+    },"30-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e30"
+        }
+    },"31-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\61"
+        }
+    },"32-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e32"
+        }
+    },"33-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\62"
+        }
+    },"34-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\63"
+        }
+    },"35-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\64"
+        }
+    },"36-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\65"
+        }
+    },"37-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\66"
+        }
+    },"38-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\67"
+        }
+    },"39-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\68"
+        }
+    },"40-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e40"
+        }
+    },"41-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e41"
+        }
+    },"42-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e42"
+        }
+    },"43-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e43"
+        }
+    },"44-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e44"
+        }
+    },"45-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\e45"
+        }
+    },"46-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\69"
+        }
+    },"47-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\70"
+        }
+    },"48-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\71"
+        }
+    },"49-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\72"
+        }
+    },"50-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\73"
+        }
+    },"51-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\74"
+        }
+    },"52-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\75"
+        }
+    },"53-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\76"
+        }
+    },"54-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\77"
+        }
+    },"55-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\78"
+        }
+    },"56-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\79"
+        }
+    },"57-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\41"
+        }
+    },"58-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\42"
+        }
+    },"59-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\43"
+        }
+    },"60-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\44"
+        }
+    },"61-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\45"
+        }
+    },"62-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\46"
+        }
+    },"63-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\47"
+        }
+    },"64-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\48"
+        }
+    },"65-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\49"
+        }
+    },"66-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\50"
+        }
+    },"67-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\51"
+        }
+    },"68-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\52"
+        }
+    },"69-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\53"
+        }
+    },"70-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\54"
+        }
+    },"71-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\55"
+        }
+    },"72-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\56"
+        }
+    },"73-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\57"
+        }
+    },"74-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\58"
+        }
+    },"75-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\59"
+        }
+    },"76-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\31"
+        }
+    },"77-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\32"
+        }
+    },"78-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\33"
+        }
+    },"79-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\34"
+        }
+    },"80-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\35"
+        }
+    },"81-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\36"
+        }
+    },"82-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\37"
+        }
+    },"83-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\38"
+        }
+    },"84-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\39"
+        }
+    },"85-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\40"
+        }
+    },"86-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\21"
+        }
+    },"87-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\22"
+        }
+    },"88-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\23"
+        }
+    },"89-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\24"
+        }
+    },"90-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\25"
+        }
+    },"91-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\26"
+        }
+    },"92-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\27"
+        }
+    },"93-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\28"
+        }
+    },"94-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\29"
+        }
+    },"95-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\30"
+        }
+    },"96-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\2f"
+        }
+    },"97-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\3f"
+        }
+    },"98-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\4f"
+        }
+    },"99-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\5f"
+        }
+    },"100-0":   {
+"description":"my icon",
+"default":{
+    "fontPath": "vevel_assets/complete_progress.woff",
+    "fontCharacter": "\\6f"
+        }
+    }
     },
     "commands":[
       {
-        "command": "extension.Reset",
-        "title": "Reset"
-      },
-      {
-        "command": "extension.ExpInc",
-        "title": "ExpInc"
+        "command": "extension.ChangeMode",
+        "title": "ChangeMode"
       }
     ],
     "keybindings":[
       {
-        "command": "extension.Reset",
-        "key": "shift+r"
-      },
-      {
-        "command": "extension.ExpInc",
-        "key": "shift+i"
+        "command": "extension.ChangeMode",
+        "key": "shift+m"
       }
     ]
   },

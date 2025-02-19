@@ -36,31 +36,49 @@ function activate(context) {
     let current_exp;
     let max_exp;
     let current_lvl;
+    let percentage;
+    let tutorial_msg;
     const workspacefolder = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
     const status_bar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 50);
     const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
     const git = gitExtension?.getAPI(1);
     const debounce_commit = debounce_inherit(getCommit, 1000);
     const debounce_exp = debounce_inherit(increaseExp, 70);
-    let progressbar = ["$(level-bar-start)", "$(level-bar-modular)", "$(level-bar-modular)", "$(level-bar-end)"];
-    vscode.commands.registerCommand('extension.Reset', () => {
-        current_lvl = 1;
-        current_exp = 0;
-        max_exp = Math.round(100 * Math.pow(2, 1.5));
-        saveData(context);
-        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-        status_bar.show();
+    let mode = context.globalState.get("mode") || "enhanced";
+    ;
+    //Commands
+    //switch level bar between basic and enhanced mode
+    vscode.commands.registerCommand('extension.ChangeMode', () => {
+        if (mode == "basic") {
+            mode = "enhanced";
+            context.globalState.update("mode", mode);
+            update();
+        }
+        else if (mode == "enhanced") {
+            mode = "basic";
+            context.globalState.update("mode", mode);
+            update();
+        }
     });
-    /*
-    vscode.commands.registerCommand('extension.ExpInc', () => {
-        current_exp+=100
-        saveData(context)
-        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-        status_bar.show();
-        increaseExp()
-    });
-    */
+    //Generates status bar
+    //Create initial or last version of level bar based on mode
     generateStatusBar(context);
+    //Retrieves current level info from vscode and populates status bar with it
+    function generateStatusBar(context) {
+        current_lvl = context.globalState.get("current_lvl") || 1;
+        current_exp = context.globalState.get("current_exp") || 0;
+        max_exp = context.globalState.get("max_exp") || Math.round(100 * Math.pow(2, 1.5));
+        tutorial_msg = context.globalState.get("tutorial_msg") || false;
+        percentage = Math.round(current_exp / max_exp * 100);
+        update();
+        console.log(tutorial_msg);
+        if (tutorial_msg == false) {
+            vscode.window.showInformationMessage('Welcome!!! Use shift+m to change the look of your level bar.');
+            tutorial_msg = true;
+            context.globalState.update("tutorial_msg", tutorial_msg);
+        }
+    }
+    //Exp methods
     //Provides experience mainly for typing but also gives exp for other changes in the doc
     let editdocument = vscode.workspace.onDidChangeTextDocument((e) => {
         debounce_exp();
@@ -69,23 +87,17 @@ function activate(context) {
     let savedocument = vscode.workspace.onDidSaveTextDocument((e) => {
         debounce_exp();
     });
-    //Retrieves current level info from vscode and populates status bar with it
-    function generateStatusBar(context) {
-        current_lvl = context.globalState.get("current_lvl") || 1;
-        current_exp = context.globalState.get("current_exp") || 0;
-        max_exp = context.globalState.get("max_exp") || Math.round(100 * Math.pow(2, 1.5));
-        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-        //status_bar.text = progressbar.join('');
-        status_bar.show();
-    }
     //Watches COMMIT_EDITMSG for changes to see if commit is made
     //If changes are made to COMMIT_EDITMSG commit is verified through a debounce function and exp is provided to level bar
-    if (workspacefolder != undefined) {
-        (0, node_fs_1.watch)(workspacefolder + "//.git//COMMIT_EDITMSG", (e) => {
-            if (gitExtension?.enabled == true && git?.state == "initialized") {
-                debounce_commit();
-            }
-        });
+    if (workspacefolder !== undefined) {
+        const commitMsgPath = `${workspacefolder}/.git/COMMIT_EDITMSG`;
+        if ((0, node_fs_2.existsSync)(commitMsgPath)) {
+            (0, node_fs_1.watch)(commitMsgPath, (e) => {
+                if (gitExtension?.enabled === true && git?.state === "initialized") {
+                    debounce_commit();
+                }
+            });
+        }
     }
     async function getCommit() {
         const commit = await git?.repositories[0].log();
@@ -93,9 +105,18 @@ function activate(context) {
             const topdir = commit[0].hash.substring(0, 2);
             const subdir = commit[0].hash.substring(2);
             if ((0, node_fs_2.existsSync)(workspacefolder + "//.git//objects//" + topdir + "//" + subdir)) {
-                current_exp += 20;
-                status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-                status_bar.show();
+                current_exp += 35;
+                percentage = Math.round(current_exp / max_exp * 100);
+                if (current_exp == max_exp) {
+                    levelUP();
+                }
+                else if (current_exp > max_exp) {
+                    levelUpOverflow();
+                }
+                else {
+                    update();
+                }
+                saveData(context);
             }
         }
     }
@@ -107,34 +128,60 @@ function activate(context) {
             timeout = setTimeout(func, ms);
         };
     }
-    //Base function is called to increase a user's exp
-    /*
-    function increaseExp() {
-        current_exp++
-        let percentage = current_exp/max_exp
-        console.log(percentage)
-    }
-        */
-    function increaseExp() {
-        current_exp++;
-        status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
-        status_bar.show();
-        while (current_exp >= max_exp) {
-            current_lvl++;
-            current_exp -= max_exp;
-            let next_level = current_lvl;
-            next_level++;
-            max_exp = Math.round(100 * Math.pow(next_level, 1.5));
+    ;
+    function update() {
+        if (mode == "basic") {
             status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
             status_bar.show();
-            saveData(context);
         }
+        else if (mode == "enhanced") {
+            status_bar.text = `${current_lvl} $(${percentage}-0)`;
+            status_bar.show();
+        }
+    }
+    function increaseExp() {
+        current_exp++;
+        percentage = Math.round(current_exp / max_exp * 100);
+        if (current_exp == max_exp) {
+            levelUP();
+        }
+        else {
+            update();
+        }
+        saveData(context);
+    }
+    function levelUP() {
+        current_lvl++;
+        current_exp = 0;
+        let next_level = current_lvl;
+        next_level++;
+        max_exp = Math.round(100 * Math.pow(next_level, 1.5));
+        if (mode == "basic") {
+            status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
+            status_bar.show();
+        }
+        else if (mode == "enhanced") {
+            status_bar.text = `${current_lvl} $(0-0)`;
+            status_bar.show();
+        }
+        saveData(context);
+    }
+    function levelUpOverflow() {
+        current_lvl++;
+        current_exp -= max_exp;
+        let next_level = current_lvl;
+        next_level++;
+        max_exp = Math.round(100 * Math.pow(next_level, 1.5));
+        percentage = Math.round(current_exp / max_exp * 100);
+        update();
+        saveData(context);
     }
     //Stores current level information 
     function saveData(context) {
         context.globalState.update("current_lvl", current_lvl);
         context.globalState.update("current_exp", current_exp);
         context.globalState.update("max_exp", max_exp);
+        context.globalState.update("mode", mode);
     }
     status_bar.dispose;
     context.subscriptions.push(editdocument);

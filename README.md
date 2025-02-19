@@ -25,8 +25,10 @@ Extension released with base functionaility.
 
 ## Future features
 
-<s>Save level info in vscode instead of external txt file.</s>
+~~Save level info in vscode instead of external txt file.~~
 
-Improve the presentation of level bar.
+~~Improve the presentation of level bar.~~
 
-Revamp exp system.
+~~Revamp exp system.~~
+
+Refine level bar animations.
