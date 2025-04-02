@@ -23,8 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const debounce_commit = debounce_inherit(getCommit, 1000);
 	const debounce_exp = debounce_inherit(increaseExp, 70);
 	let mode = context.globalState.get<number>("mode") || "enhanced";;
-
-	
+	//bug for some reason level bar is full after leveling up if you change modes
+	//add animation
 
 	//Commands
 	//switch level bar between basic and enhanced mode
@@ -39,7 +39,6 @@ export function activate(context: vscode.ExtensionContext) {
 		update();
 		}
 	});
-
 	
 	//Generates status bar
 	//Create initial or last version of level bar based on mode
@@ -152,11 +151,12 @@ export function activate(context: vscode.ExtensionContext) {
 		let next_level = current_lvl;
 		next_level++;
 		max_exp = Math.round(100 * Math.pow(next_level,1.5));
+		percentage = Math.round(current_exp/max_exp * 100);
 		if(mode=="basic"){
 			status_bar.text = `LVL ${current_lvl} ${current_exp}/${max_exp}`;
 			status_bar.show();
 		}else if(mode=="enhanced"){
-			status_bar.text =  `${current_lvl} $(0-0)`;
+			status_bar.text =  `${current_lvl} $(${percentage }-0)`;
 			status_bar.show();
 		}
 		saveData(context);	
